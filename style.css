@@ -1,0 +1,479 @@
+/* ==========================================================================
+   FICHEIRO: style.css | DISCIPLINA: Front-End / Folhas de Estilo (CSS3)
+   PROJETO: Terminal de Dados Pokémon (CYBER_DEX - Gerações I a IX)
+   ESTÉTICA: Cyber-Grunge / Retro-Tech (Alto Contraste, Monospace, Néon)
+   ==========================================================================
+   OTIMIZAÇÕES PEDAGÓGICAS APLICADAS:
+   1. Remoção de regras órfãs (.terminal-header, .cyber-status-readout, .terminal-cursor).
+   2. Preservação de todas as classes injetadas dinamicamente via JS (.cyber-card,
+      .badge-mega, .badge-gmax, .cyber-type-badge, .card-img-chamber, etc.).
+   3. Centralização de variáveis néon no :root para fácil manutenção da paleta.
+   ========================================================================== */
+
+/*VARIÁVEIS GLOBAIS*/
+:root {
+  --cyber-bg: #030606;
+  --cyber-surface: #070c0c;
+  --cyber-border: #162a24;
+
+  /* Cores Principais */
+  --neon-green: #00ff41;
+  --neon-green-glow: rgba(0, 255, 65, 0.4);
+  --neon-cyan: #00f0ff;
+  --neon-cyan-glow: rgba(0, 240, 255, 0.35);
+  --neon-red: #ff3344;
+  --neon-red-glow: rgba(255, 51, 68, 0.4);
+  --neon-purple: #b026ff;
+  --neon-purple-glow: rgba(176, 38, 255, 0.4);
+
+    /* Fontes */
+  --font-mono: 'Share Tech Mono', 'JetBrains Mono', Consolas, monospace;
+}
+
+/* 2. BASE DO CORPO E SCANLINES CRT */
+body.cyber-grunge-body {
+  background-color: var(--cyber-bg);
+  background-image: 
+    radial-gradient(circle at 50% 0%, rgba(0, 255, 65, 0.05) 0%, transparent 60%),
+    linear-gradient(rgba(0, 255, 65, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 65, 0.02) 1px, transparent 1px);
+  background-size: 100% 100%, 30px 30px, 30px 30px;
+  color: #c9d1d9;
+  font-family: var(--font-mono);
+  min-height: 100vh;
+  letter-spacing: 0.5px;
+  overflow-x: hidden;
+}
+
+/* Utilitários de Texto */
+.text-neon-green {
+  color: var(--neon-green) !important;
+  text-shadow: 0 0 8px var(--neon-green-glow);
+}
+
+.text-neon-cyan {
+  color: var(--neon-cyan) !important;
+  text-shadow: 0 0 8px var(--neon-cyan-glow);
+}
+
+.border-cyber {
+  border-color: var(--cyber-border) !important;
+}
+
+/* Camada de Scanlines(Monitor Antigo) */
+.crt-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9999;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.35) 50%);
+  background-size: 100% 4px;
+  opacity: 0.65;
+}
+
+/* Cabeçalho do Terminal */
+header {
+  background: linear-gradient(90deg, #051410 0%, #08241b 50%, #051410 100%);
+  border-bottom: 2px solid var(--neon-green) !important;
+  box-shadow: 0 4px 20px rgba(0, 255, 65, 0.25);
+  backdrop-filter: blur(10px);
+}
+
+/* 3. BARRA DE COMANDO E CONTROLOS DE PESQUISA */
+.cyber-command-box {
+  background: linear-gradient(180deg, #091211 0%, #050a0a 100%);
+  border: 1px solid var(--cyber-border);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+}
+
+.cyber-input-group {
+  border: 1px solid #1a382f;
+  background-color: #030606;
+  border-radius: 4px;
+  overflow: hidden;
+  transition: all 0.25s ease;
+}
+
+.cyber-input-group:focus-within {
+  border-color: var(--neon-green);
+  box-shadow: 0 0 12px var(--neon-green-glow);
+}
+
+.cyber-prompt-prefix {
+  background-color: #081110;
+  border: none;
+  color: var(--neon-green);
+  font-weight: bold;
+  padding: 0.6rem 0.9rem;
+  border-right: 1px solid #1a382f;
+  transition: color 0.25s ease;
+}
+
+.cyber-input {
+  background-color: transparent !important;
+  border: none !important;
+  color: #fff !important;
+  box-shadow: none !important;
+  padding: 0.6rem 0.9rem;
+}
+
+.cyber-input::placeholder {
+  color: #4b665c !important;
+}
+
+.btn-cyber-clear {
+  background-color: #081110;
+  border: none;
+  border-left: 1px solid #1a382f;
+  color: #7b998e;
+  transition: all 0.2s ease;
+}
+
+.btn-cyber-clear:hover {
+  background-color: #1a080c;
+  color: var(--neon-red);
+}
+
+/* Gaveta de Tipos */
+.cyber-type-drawer {
+  background-color: #040808 !important;
+  border: 1px solid rgba(0, 240, 255, 0.4) !important;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.95), 0 0 20px rgba(0, 240, 255, 0.2) !important;
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  width: 100%;
+  z-index: 1050;
+}
+
+.btn-tipo-filtro {
+  cursor: pointer;
+  border: 2px solid transparent !important;
+  transition: transform 0.15s ease, filter 0.15s ease, box-shadow 0.2s ease;
+  user-select: none;
+}
+
+.btn-tipo-filtro:hover {
+  transform: translateY(-2px) scale(1.05);
+  filter: brightness(1.2);
+}
+
+.btn-tipo-filtro.active {
+  border-color: #ffffff !important;
+  box-shadow: 0 0 8px #ffffff, 0 0 16px currentColor !important;
+  transform: scale(1.06);
+}
+
+.cyber-search-badge {
+  cursor: pointer;
+  transition: transform 0.15s ease, filter 0.15s ease;
+  user-select: none;
+}
+
+.cyber-search-badge:hover {
+  transform: scale(1.08);
+  filter: brightness(1.25);
+}
+
+.cyber-select {
+  background-color: #030606 !important;
+  color: var(--neon-cyan) !important;
+  border: 1px solid #1a382f !important;
+  padding: 0.6rem 0.75rem;
+}
+
+.cyber-select:focus {
+  border-color: var(--neon-cyan) !important;
+  box-shadow: 0 0 10px var(--neon-cyan-glow) !important;
+}
+
+/* 4. BADGES MEGA, G-MAX E TIPOS */
+.badge-mega, .badge-gmax {
+  font-weight: 800;
+  font-size: 0.7rem;
+  letter-spacing: 0.5px;
+  padding: 0.2rem 0.45rem;
+  border-radius: 3px;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.badge-mega {
+  background: linear-gradient(135deg, #1c082e 0%, #2b0b47 100%) !important;
+  color: #f3d5ff !important;
+  border: 1px solid var(--neon-purple) !important;
+  box-shadow: 0 0 8px var(--neon-purple-glow);
+}
+
+.badge-gmax {
+  background: linear-gradient(135deg, #2a080c 0%, #470e15 100%) !important;
+  color: #ffccd2 !important;
+  border: 1px solid var(--neon-red) !important;
+  box-shadow: 0 0 8px var(--neon-red-glow);
+}
+
+.cyber-form-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.cyber-type-badge {
+  font-size: 0.68rem;
+  padding: 0.2rem 0.45rem;
+  letter-spacing: 1px;
+  font-weight: 800;
+  border-radius: 2px;
+  text-transform: uppercase;
+}
+
+/* 5. SPINNER E ALERTAS DE TERMINAL */
+.cyber-spinner {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto;
+  border: 3px solid rgba(0, 255, 65, 0.15);
+  border-top-color: var(--neon-green);
+  border-radius: 50%;
+  animation: cyberSpin 0.8s linear infinite;
+  box-shadow: 0 0 15px var(--neon-green-glow);
+}
+
+@keyframes cyberSpin {
+  to { transform: rotate(360deg); }
+}
+
+.cyber-alert-danger {
+  background: #190509;
+  border: 1px solid var(--neon-red);
+  box-shadow: 0 0 15px rgba(255, 51, 68, 0.3);
+}
+
+/* 6. CARTÕES DA GRELHA */
+.cyber-card {
+  background: linear-gradient(160deg, #091211 0%, #040808 100%);
+  border: 1px solid var(--cyber-border);
+  border-radius: 6px;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  overflow: hidden;
+}
+
+.cyber-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 16px 16px 0;
+  border-color: transparent var(--cyber-border) transparent transparent;
+  transition: border-color 0.2s ease;
+}
+
+.cyber-card:hover {
+  transform: translateY(-4px) scale(1.02);
+  z-index: 5;
+}
+
+.cyber-card:hover::after {
+  border-color: transparent var(--neon-green) transparent transparent;
+}
+
+.card-img-chamber {
+  background: radial-gradient(circle, rgba(0, 255, 65, 0.04) 0%, rgba(0, 0, 0, 0.45) 80%);
+  border: none;
+  border-radius: 4px;
+  padding: 0.75rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 140px;
+  position: relative;
+}
+
+.cyber-card img {
+  max-width: 110px;
+  max-height: 110px;
+  object-fit: contain;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.8));
+}
+
+.cyber-card:hover img {
+  transform: scale(1.12);
+}
+
+.cyber-tag {
+  background-color: #030606;
+  border: 1px solid #1a382f;
+  color: var(--neon-cyan);
+  font-size: 0.75rem;
+  padding: 0.15rem 0.5rem;
+  letter-spacing: 1px;
+}
+/* 7. MODAL DETAIL, SHOWDOWN GIF E ESTATÍSTICAS */
+.cyber-modal-content {
+  background-color: #040808 !important;
+  border: 1px solid var(--neon-green) !important;
+  box-shadow: 0 0 30px rgba(0, 255, 65, 0.3) !important;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cyber-record-light {
+  width: 8px;
+  height: 8px;
+  background-color: var(--neon-red);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--neon-red);
+  animation: pulseLive 1.5s infinite;
+}
+
+@keyframes pulseLive {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.9); }
+}
+
+.gif-containment-chamber {
+  background: radial-gradient(circle, rgba(0, 240, 255, 0.08) 0%, rgba(2, 5, 5, 0.95) 85%);
+  border: 1px solid #1a382f;
+  border-radius: 6px;
+  padding: 1.5rem 1rem;
+  min-height: 220px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.3s ease;
+}
+
+.gif-containment-chamber::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
+  box-shadow: 0 0 8px var(--neon-cyan);
+  animation: laserScan 2.5s ease-in-out infinite alternate;
+}
+
+@keyframes laserScan {
+  0%   { top: 5%;  opacity: 0.2; }
+  100% { top: 95%; opacity: 1;   }
+}
+
+.pokemon-gif {
+  max-width: 140px;
+  max-height: 140px;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 0 12px rgba(0, 240, 255, 0.5));
+  z-index: 2;
+}
+
+.cyber-form-selector {
+  background: linear-gradient(180deg, #071211 0%, #030707 100%);
+  border: 1px solid #1a382f;
+  border-radius: 4px;
+}
+
+.btn-cyber-form {
+  background-color: #060d0c;
+  border: 1px solid #1b3830;
+  color: #8da69e;
+  font-size: 0.78rem;
+  padding: 0.3rem 0.65rem;
+  transition: all 0.2s ease;
+}
+
+.btn-cyber-form:hover {
+  border-color: var(--neon-cyan);
+  color: var(--neon-cyan);
+  box-shadow: 0 0 8px var(--neon-cyan-glow);
+}
+
+.btn-cyber-form.active {
+  background: rgba(0, 240, 255, 0.15) !important;
+  border-color: var(--neon-cyan) !important;
+  color: #fff !important;
+  box-shadow: 0 0 12px var(--neon-cyan-glow);
+  font-weight: bold;
+}
+
+.spec-cyber-box {
+  background-color: #030606;
+  border: 1px solid #162a24;
+  padding: 0.5rem;
+  text-align: center;
+}
+
+.stat-cyber-row {
+  margin-bottom: 0.5rem;
+}
+
+.stat-cyber-row .progress {
+  height: 6px;
+  background-color: #060c0c;
+  border-radius: 0;
+  overflow: hidden;
+  border: 1px solid #132420;
+}
+
+.stat-cyber-row .progress-bar {
+  transition: width 0.4s ease, background-color 0.3s ease;
+}
+
+.btn-outline-cyber {
+  border: 1px solid #1a382f;
+  color: #7b998e;
+  background: transparent;
+  transition: all 0.2s ease;
+}
+
+.btn-outline-cyber:hover {
+  border-color: var(--neon-green);
+  color: var(--neon-green);
+  box-shadow: 0 0 10px var(--neon-green-glow);
+}
+
+/* 8. BOTÃO CARREGAR MAIS */
+.btn-cyber-more {
+  background-color: #050d0c;
+  border: 1px solid var(--neon-green);
+  color: var(--neon-green);
+  font-weight: bold;
+  letter-spacing: 1px;
+  box-shadow: 0 0 12px var(--neon-green-glow);
+  transition: all 0.25s ease;
+}
+
+.btn-cyber-more:hover {
+  background-color: var(--neon-green);
+  color: #000;
+  box-shadow: 0 0 20px var(--neon-green);
+  transform: translateY(-2px);
+}
+
+/* 9. SCROLLBAR  */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #020404;
+}
+::-webkit-scrollbar-thumb {
+  background: #142a23;
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--neon-green);
+  box-shadow: 0 0 8px var(--neon-green);
+}
